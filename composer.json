@@ -2,14 +2,21 @@
     "name": "ronanchilvers/paginator",
     "description": "Paginator classes for use with ronanchilvers/orm",
     "type": "library",
-    "require": {
-        "ronanchilvers/orm": "^1.0"
-    },
     "license": "MIT",
     "authors": [
         {
             "name": "Ronan Chilvers",
             "email": "ronan@thelittledot.com"
         }
-    ]
+    ],
+    "require": {
+        "clancats/hydrahon": "^1.1",
+        "php": "^7.1.8",
+        "ronanchilvers/orm": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ronanchilvers\\Orm\\Paginator\\": "src"
+        }
+    }
 }
