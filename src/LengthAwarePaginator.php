@@ -23,6 +23,29 @@ class LengthAwarePaginator extends AbstractPaginator
     protected $hasMore = false;
 
     /**
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function createPages($count = 10): array
+    {
+        $links = [];
+        $pos = $this->page - ($count / 2 - 1);
+        if ($pos < 1) {
+            $pos = 1;
+        }
+        $end = $pos + $count;
+        $maxPage = ceil($this->total / $this->perPage);
+        if ($end > $maxPage) {
+            $end = $maxPage;
+        }
+        while ($pos < $end) {
+            $links[] = $pos;
+            $pos++;
+        }
+
+        return $links;
+    }
+
+    /**
      * Are there more records available?
      *
      * @return bool
@@ -43,7 +66,7 @@ class LengthAwarePaginator extends AbstractPaginator
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function load()
+    protected function load(): array
     {
         $resultSelect = clone $this->select();
         $countSelect = clone $this->select();

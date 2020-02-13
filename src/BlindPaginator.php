@@ -21,12 +21,20 @@ class BlindPaginator extends AbstractPaginator
     protected $hasMore = false;
 
     /**
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    protected function createPages($count = 10): array
+    {
+        return [];
+    }
+
+    /**
      * Are there more records available?
      *
      * @return bool
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function hasMore(): bool
+    protected function paginatorHasMore(): bool
     {
         return $this->hasMore;
     }
@@ -34,7 +42,7 @@ class BlindPaginator extends AbstractPaginator
     /**
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function load()
+    protected function load(): array
     {
         $select = clone $this->select();
         $page = $this->page;

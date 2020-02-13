@@ -31,11 +31,6 @@ abstract class AbstractPaginator implements
     protected $perPage;
 
     /**
-     * @var int
-     */
-    protected $index;
-
-    /**
      * @var array
      */
     protected $data;
@@ -45,8 +40,11 @@ abstract class AbstractPaginator implements
      *
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function __construct(Select $select, int $page, int $perPage = 10)
-    {
+    public function __construct(
+        Select $select,
+        int $page,
+        int $perPage = 10
+    ) {
         if (($page = (int) $page) < 0) {
             $page = 0;
         }
@@ -57,7 +55,7 @@ abstract class AbstractPaginator implements
         $this->page = $page;
         $this->perPage = $perPage;
         $this->data = null;
-        $this->index = 0;
+        $this->queryParam = $queryParam;
     }
 
     /** START Countable compliance **/
@@ -142,13 +140,22 @@ abstract class AbstractPaginator implements
      * @return boolean
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function hasLess()
+    public function hasLess(): bool
     {
         if (is_null($this->data)) {
             $this->data = $this->load();
         }
 
         return 1 < $this->page;
+    }
+
+    public function getPages($count = 10): array
+    {
+        if (is_null($this->data)) {
+            $this->data = $this->load();
+        }
+
+        return $this->createPages($count);
     }
 
     /**
@@ -185,17 +192,28 @@ abstract class AbstractPaginator implements
     }
 
     /**
+     * Get a set of valid page links
+     *
+     * The current page is in the middle. We return $count links in total.
+     *
+     * @return array
+     * @author Ronan Chilvers <ronan@d3r.com>
+     */
+    abstract protected function createPages($count = 10): array;
+
+    /**
      * Internal method to detect if there are more records available
      *
      * @return bool
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    abstract protected function paginatorHasMore();
+    abstract protected function paginatorHasMore(): bool;
 
     /**
      * Load the data from the database by executing the select query
      *
+     * @return array
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    abstract protected function load();
+    abstract protected function load(): array;
 }
