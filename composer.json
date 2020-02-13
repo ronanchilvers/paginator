@@ -1,0 +1,15 @@
+{
+    "name": "ronanchilvers/paginator",
+    "description": "Paginator classes for use with ronanchilvers/orm",
+    "type": "library",
+    "require": {
+        "ronanchilvers/orm": "^1.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ronan Chilvers",
+            "email": "ronan@thelittledot.com"
+        }
+    ]
+}
