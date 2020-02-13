@@ -105,7 +105,7 @@ abstract class AbstractPaginator implements
             $this->data = $this->load();
         }
 
-        rewind($this->data);
+        reset($this->data);
     }
 
     public function valid(): bool
