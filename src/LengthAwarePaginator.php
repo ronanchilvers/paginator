@@ -46,14 +46,15 @@ class LengthAwarePaginator extends AbstractPaginator
     }
 
     /**
-     * Are there more records available?
-     *
-     * @return bool
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function paginatorHasMore(): bool
+    protected function fetchNextPage(): ?int
     {
-        return $this->total >= (($this->page * $this->perPage) + $this->perPage);
+        if ($this->total >= ($this->page + 1) * $this->perPage) {
+            return $this->page + 1;
+        }
+
+        return null;
     }
 
     /**
@@ -70,6 +71,7 @@ class LengthAwarePaginator extends AbstractPaginator
     {
         $resultSelect = clone $this->select();
         $countSelect = clone $this->select();
+        $this->total = $countSelect->count();
 
         $page = $this->page;
         $perPage = $this->perPage;
@@ -79,7 +81,6 @@ class LengthAwarePaginator extends AbstractPaginator
             $offset,
             $perPage
         );
-        $this->total = $countSelect->count();
         $result = $resultSelect->execute();
 
         return $result;

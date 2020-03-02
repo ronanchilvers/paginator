@@ -2,7 +2,7 @@
 
 namespace Ronanchilvers\Orm\Paginator;
 
-use App\Orm\Paginator\AbstractPaginator;
+use Ronanchilvers\Orm\Paginator\AbstractPaginator;
 use ClanCats\Hydrahon\Query\Sql\Select;
 
 /**
@@ -29,14 +29,15 @@ class BlindPaginator extends AbstractPaginator
     }
 
     /**
-     * Are there more records available?
-     *
-     * @return bool
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    protected function paginatorHasMore(): bool
+    protected function fetchNextPage(): ?int
     {
-        return $this->hasMore;
+        if ($this->hasMore) {
+            return $this->page + 1;
+        }
+
+        return null;
     }
 
     /**

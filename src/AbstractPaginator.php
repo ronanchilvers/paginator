@@ -55,7 +55,6 @@ abstract class AbstractPaginator implements
         $this->page = $page;
         $this->perPage = $perPage;
         $this->data = null;
-        $this->queryParam = $queryParam;
     }
 
     /** START Countable compliance **/
@@ -122,31 +121,36 @@ abstract class AbstractPaginator implements
     /**
      * Are there more records available
      *
-     * @return boolean
+     * @return int|null
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function hasMore(): bool
+    public function nextPage(): ?int
     {
         if (is_null($this->data)) {
             $this->data = $this->load();
         }
 
-        return $this->paginatorHasMore();
+        $next = $this->fetchNextPage();
+
+        return $next;
     }
 
     /**
      * Are there less records available
      *
-     * @return boolean
+     * @return int|null
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    public function hasLess(): bool
+    public function prevPage(): ?int
     {
         if (is_null($this->data)) {
             $this->data = $this->load();
         }
+        if (1 == $this->page) {
+            return null;
+        }
 
-        return 1 < $this->page;
+        return $this->page - 1;
     }
 
     public function getPages($count = 10): array
@@ -204,10 +208,10 @@ abstract class AbstractPaginator implements
     /**
      * Internal method to detect if there are more records available
      *
-     * @return bool
+     * @return int|null
      * @author Ronan Chilvers <ronan@d3r.com>
      */
-    abstract protected function paginatorHasMore(): bool;
+    abstract protected function fetchNextPage(): ?int;
 
     /**
      * Load the data from the database by executing the select query
